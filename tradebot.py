@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 # Dependency for wait element
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import WebDriverWait
@@ -35,6 +36,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from collections import Counter
 import scipy.stats
+from os import path
 
 __version__ = "0.0.9"
 __author__ = "vBlackOut"
@@ -75,52 +77,52 @@ class Trading():
             options_firefox.headless = False
         else:
             options_firefox.headless = True
-        # options_firefox.set_preference('dom.webnotifications.enabled', True)
-        # options_firefox.set_preference('network.cookie.cookieBehavior', True)
-        # options_firefox.add_argument("start-maximized")
-        # options_firefox.add_argument("disable-infobars")
-        # options_firefox.add_argument("--disable-extensions")
-        # options_firefox.add_argument('--no-sandbox')
-        # options_firefox.add_argument('--disable-application-cache')
-        # options_firefox.add_argument('--disable-gpu')
-        # options_firefox.add_argument("--disable-dev-shm-usage")
+            options_firefox.set_preference('dom.webnotifications.enabled', True)
+            options_firefox.set_preference('network.cookie.cookieBehavior', True)
+            options_firefox.add_argument("start-maximized")
+            options_firefox.add_argument("disable-infobars")
+            options_firefox.add_argument("--disable-extensions")
+            options_firefox.add_argument('--no-sandbox')
+            options_firefox.add_argument('--disable-application-cache')
+            options_firefox.add_argument('--disable-gpu')
+            options_firefox.add_argument("--disable-dev-shm-usage")
 
         profile = webdriver.FirefoxProfile()
-        # profile.set_preference("network.http.pipelining", True)
-        # profile.set_preference("network.http.proxy.pipelining", True)
-        # profile.set_preference("network.http.pipelining.maxrequests", 12)
-        # profile.set_preference("content.notify.interval", 500000)
-        # profile.set_preference("content.notify.ontimer", True)
-        # profile.set_preference("content.switch.threshold", 250000)
-        # profile.set_preference("browser.cache.memory.capacity", 65536) # Increase the cache capacity.
-        # profile.set_preference("browser.startup.homepage", "about:blank")
-        # profile.set_preference("reader.parse-on-load.enabled", False) # Disable reader, we won't need that.
-        # profile.set_preference("browser.pocket.enabled", False) # Duck pocket too!
-        # profile.set_preference("loop.enabled", False)
-        # profile.set_preference("browser.chrome.toolbar_style", 1) # Text on Toolbar instead of icons
-        # profile.set_preference("browser.display.show_image_placeholders", False) # Don't show thumbnails on not loaded images.
-        # profile.set_preference("browser.display.use_document_colors", False) # Don't show document colors.
-        # profile.set_preference("browser.display.use_document_fonts", 0) # Don't load document fonts.
-        # profile.set_preference("browser.display.use_system_colors", False) # Use system colors.
-        # profile.set_preference("browser.formfill.enable", False) # Autofill on forms disabled.
-        # profile.set_preference("browser.helperApps.deleteTempFileOnExit", True) # Delete temprorary files.
-        # profile.set_preference("browser.shell.checkDefaultBrowser", False)
-        # profile.set_preference("browser.startup.homepage", "about:blank")
-        # profile.set_preference("browser.startup.page", 0) # blank
-        # profile.set_preference("browser.tabs.forceHide", True) # Disable tabs, We won't need that.
-        # profile.set_preference("browser.urlbar.autoFill", False) # Disable autofill on URL bar.
-        # profile.set_preference("browser.urlbar.autocomplete.enabled", False) # Disable autocomplete on URL bar.
-        # profile.set_preference("browser.urlbar.showPopup", False) # Disable list of URLs when typing on URL bar.
-        # profile.set_preference("browser.urlbar.showSearch", False) # Disable search bar.
-        # profile.set_preference("extensions.checkCompatibility", False) # Addon update disabled
-        # profile.set_preference("extensions.checkUpdateSecurity", False)
-        # profile.set_preference("extensions.update.autoUpdateEnabled", False)
-        # profile.set_preference("extensions.update.enabled", False)
-        # profile.set_preference("general.startup.browser", False)
-        # profile.set_preference("plugin.default_plugin_disabled", False)
-        # profile.set_preference("permissions.default.image", 2) # Image load disabled again
-
-        self.navigateur = webdriver.Firefox(profile, options=options_firefox)
+        profile.set_preference("network.http.pipelining", True)
+        profile.set_preference("network.http.proxy.pipelining", True)
+        profile.set_preference("network.http.pipelining.maxrequests", 12)
+        profile.set_preference("content.notify.interval", 500000)
+        profile.set_preference("content.notify.ontimer", True)
+        profile.set_preference("content.switch.threshold", 250000)
+        profile.set_preference("browser.cache.memory.capacity", 65536) # Increase the cache capacity.
+        profile.set_preference("browser.startup.homepage", "about:blank")
+        profile.set_preference("reader.parse-on-load.enabled", False) # Disable reader, we won't need that.
+        profile.set_preference("browser.pocket.enabled", False) # Duck pocket too!
+        profile.set_preference("loop.enabled", False)
+        profile.set_preference("browser.chrome.toolbar_style", 1) # Text on Toolbar instead of icons
+        profile.set_preference("browser.display.show_image_placeholders", False) # Don't show thumbnails on not loaded images.
+        profile.set_preference("browser.display.use_document_colors", False) # Don't show document colors.
+        profile.set_preference("browser.display.use_document_fonts", 0) # Don't load document fonts.
+        profile.set_preference("browser.display.use_system_colors", False) # Use system colors.
+        profile.set_preference("browser.formfill.enable", False) # Autofill on forms disabled.
+        profile.set_preference("browser.helperApps.deleteTempFileOnExit", True) # Delete temprorary files.
+        profile.set_preference("browser.shell.checkDefaultBrowser", False)
+        profile.set_preference("browser.startup.homepage", "about:blank")
+        profile.set_preference("browser.startup.page", 0) # blank
+        profile.set_preference("browser.tabs.forceHide", True) # Disable tabs, We won't need that.
+        profile.set_preference("browser.urlbar.autoFill", False) # Disable autofill on URL bar.
+        profile.set_preference("browser.urlbar.autocomplete.enabled", False) # Disable autocomplete on URL bar.
+        profile.set_preference("browser.urlbar.showPopup", False) # Disable list of URLs when typing on URL bar.
+        profile.set_preference("browser.urlbar.showSearch", False) # Disable search bar.
+        profile.set_preference("extensions.checkCompatibility", False) # Addon update disabled
+        profile.set_preference("extensions.checkUpdateSecurity", False)
+        profile.set_preference("extensions.update.autoUpdateEnabled", False)
+        profile.set_preference("extensions.update.enabled", False)
+        profile.set_preference("general.startup.browser", False)
+        profile.set_preference("plugin.default_plugin_disabled", False)
+        profile.set_preference("permissions.default.image", 2) # Image load disabled again
+        service = Service(log_path=path.devnull)
+        self.navigateur = webdriver.Firefox(profile, options=options_firefox, service=service)
         #self.navigateur.set_window_size(1300, 1000)
 
         self.navigateur.maximize_window()
@@ -420,7 +422,7 @@ class Trading():
 
         dict_predict_long = {"buy": 0, "sell": 0, "neutre": 0}
 
-        if len(x) >= 1000 and len(y) >= 1000:
+        if len(x) >= 1 and len(y) >= 1:
             k, d = np.polyfit(x, y, 1)
             y_pred_long = k*x + d
 
@@ -446,7 +448,7 @@ class Trading():
         y = np.array(list_value_currency)
         dict_predict_short = {"buy": 0, "sell": 0, "neutre": 0}
 
-        if len(x) >= 1000 and len(y) >= 1000:
+        if len(x) >= 1 and len(y) >= 1:
 
             k, d = np.polyfit(x, y, 1)
             y_pred_short = k*x + d
@@ -474,6 +476,7 @@ class Trading():
                 return logs_database.create(currency=data['currency'], value=data['value']).save()
         except:
             return logs_database.create(currency=data['currency'], value=data['value']).save()
+
 
     def action_trading(self, currency, action, invest_direction=""):
         if currency in self.start_simu.keys():
@@ -661,7 +664,7 @@ class Trading():
         """.format(__version__, __author__)
 
         self.console.print(text, self.table)
-        time.sleep(0.01)
+        time.sleep(0.001)
 
     def stop(self):
         print("__exit__")
