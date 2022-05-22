@@ -418,21 +418,24 @@ class Trading():
         x = np.array(list_id_currency_long)
         y = np.array(list_value_currency_long)
 
-        k, d = np.polyfit(x, y, 1)
-        y_pred_long = k*x + d
-
         dict_predict_long = {"buy": 0, "sell": 0, "neutre": 0}
-        predict_value_long = y_pred_long
 
-        for i in predict_value_long[::-1]:
-            if current_value > round(float(i),2):
-                action_pred = "buy"
-                dict_predict_long['buy'] += 1
-            elif current_value < round(float(i),2):
-                action_pred = "sell"
-                dict_predict_long['sell'] += 1
-            elif current_value == round(float(i),2):
-                dict_predict_long['neutre'] += 1
+        if len(x) >= 1000 and len(y) >= 1000:
+            k, d = np.polyfit(x, y, 1)
+            y_pred_long = k*x + d
+
+            predict_value_long = y_pred_long
+
+            for i in predict_value_long[::-1]:
+                if current_value > round(float(i),2):
+                    action_pred = "buy"
+                    dict_predict_long['buy'] += 1
+                elif current_value < round(float(i),2):
+                    action_pred = "sell"
+                    dict_predict_long['sell'] += 1
+                elif current_value == round(float(i),2):
+                    dict_predict_long['neutre'] += 1
+
 
         # predict short
         for i, currency_db in enumerate(data[::-1][-300:]):
@@ -441,30 +444,35 @@ class Trading():
 
         x = np.array(list_id_currency)
         y = np.array(list_value_currency)
-
-        k, d = np.polyfit(x, y, 1)
-        y_pred_short = k*x + d
-
         dict_predict_short = {"buy": 0, "sell": 0, "neutre": 0}
-        predict_value_short = y_pred_short
 
-        for i in predict_value_short:
-            if current_value > round(float(i),2):
-                action_pred = "buy"
-                dict_predict_short['buy'] += 1
-            elif current_value < round(float(i),2):
-                action_pred = "sell"
-                dict_predict_short['sell'] += 1
-            elif current_value == round(float(i),2):
-                dict_predict_short['neutre'] += 1
+        if len(x) >= 1000 and len(y) >= 1000:
+
+            k, d = np.polyfit(x, y, 1)
+            y_pred_short = k*x + d
+
+            predict_value_short = y_pred_short
+
+            for i in predict_value_short:
+                if current_value > round(float(i),2):
+                    action_pred = "buy"
+                    dict_predict_short['buy'] += 1
+                elif current_value < round(float(i),2):
+                    action_pred = "sell"
+                    dict_predict_short['sell'] += 1
+                elif current_value == round(float(i),2):
+                    dict_predict_short['neutre'] += 1
 
         return dict_predict_short, dict_predict_long
 
 
     def append_database(self, **data):
-        last_data = logs_database.select().order_by(logs_database.id.desc()).get()
+        try:
+            last_data = logs_database.select().order_by(logs_database.id.desc()).get()
 
-        if data['value'] != int(last_data.value):
+            if data['value'] != int(last_data.value):
+                return logs_database.create(currency=data['currency'], value=data['value']).save()
+        except:
             return logs_database.create(currency=data['currency'], value=data['value']).save()
 
     def action_trading(self, currency, action, invest_direction=""):
