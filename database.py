@@ -2,10 +2,6 @@ from peewee import *
 import datetime
 
 sqlite_db = SqliteDatabase('/home/travail/Python/trading/database.db', pragmas={'journal_mode': 'wal'})
-#sqlite_db = MySQLDatabase("chaufeau", host="127.0.0.1", port=3306, user="root", passwd="ng92garxr")
-
-# Connect to a Postgres database.
-#sqlite_db = PostgresqlDatabase('chaufeau', user='chaufeau', password='chaufeau', host='127.0.0.1', port=5432)
 
 class logs_database(Model):
     currency = CharField()
